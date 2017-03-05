@@ -7,7 +7,7 @@ set ::module_build [file tail [module-info name]]
 set ::distro el6
 
 
-proc getDirName { appsroot appname } {
+proc GetDirName { appsroot appname } {
     set dirlist [glob -nocomplain -directory $appsroot -tails *]
     return [lsearch -inline -nocase [split $dirlist] $appname]
 }
@@ -30,7 +30,7 @@ proc SetAppDir { suffix_dir { app_dir_env 0 } } {
         set ::apps_root /opt/share
     }
 
-    set ::dir_name [getDirName $::apps_root $::module_name]
+    set ::dir_name [GetDirName $::apps_root $::module_name]
 
     # app_dir
     if { [info exists ::env(${app_dir_env})] } {
