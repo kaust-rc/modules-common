@@ -1,15 +1,10 @@
 #%Module 1.0 -*- tcl -*-
 
-# Set some global variables that we need here and in the module file including this one.
+# Set some global variables that we need here and in the module file
 set ::module_name [lrange [split [module-info name] /] 0 0]
-set ::module_name_uc [string toupper $::module_name]
 set ::version [lrange [split [module-info name] /] 1 1]
 set ::module_build [file tail [module-info name]]
-set ::distro $::env(KAUST_DISTRO)
-set ::distro_fb el6
-set curpath [file dirname $::ModulesCurrentModulefile]
-set ::module_extra_dir [regsub {/(applications|compilers|libs)/} $curpath {/\1-extra/}]
-set ::dir_name $::module_name
+set ::distro el6
 
 
 proc getDirName { appsroot appname } {
@@ -20,7 +15,8 @@ proc getDirName { appsroot appname } {
 
 proc SetAppDir { suffix_dir { app_dir_env 0 } } {
     #KAUST APPNAME
-    regsub -all {[\-]} ${::module_name_uc} "_" KAUST_APPNAME
+    set module_name_uc [string toupper $::module_name]
+    regsub -all {[\-]} ${module_name_uc} "_" KAUST_APPNAME
     setenv KAUST_APPNAME ${KAUST_APPNAME}
 
     if { $app_dir_env == 0 } {
@@ -34,7 +30,7 @@ proc SetAppDir { suffix_dir { app_dir_env 0 } } {
         set ::apps_root /opt/share
     }
 
-    set ::dir_name [getDirName $::apps_root $::dir_name]
+    set ::dir_name [getDirName $::apps_root $::module_name]
 
     # app_dir
     if { [info exists ::env(${app_dir_env})] } {
@@ -44,7 +40,7 @@ proc SetAppDir { suffix_dir { app_dir_env 0 } } {
 
         #Do we need to fallback
         if { [file exists $::app_dir] == 0 } {
-            set ::app_dir [string map "/$::distro /$::distro_fb" $::app_dir]
+            set ::app_dir [string map "/$::distro /el6" $::app_dir]
         }
     }
 
@@ -59,9 +55,8 @@ proc GeneralModulesHelp {} {
 
 
 proc SetWhatis {} {
-    global module_extra_dir
-
-    set desc_file [join [read [open "$module_extra_dir/.desc"]]]
+    set curpath [file dirname $::ModulesCurrentModulefile]
+    set desc_file [join [read [open "$curpath/.desc"]]]
     module-whatis "$desc_file"
 }
 
