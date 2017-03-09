@@ -12,6 +12,6 @@ cherrypy.config.update({'log.screen': False,
                         'log.error_file': '/var/tmp/module.logs.err',})
 
 cherrypy.config.update({'server.socket_host': '0.0.0.0',
-                         'server.socket_port': 8887,})
+                         'server.socket_port': 8087,})
 
 cherrypy.quickstart(LogServer(), '/logs/')
