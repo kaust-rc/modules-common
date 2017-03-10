@@ -1,17 +1,15 @@
-import cherrypy
-import addlog
+import cherrypy, os.path, addlog
 
 @cherrypy.popargs('mode', 'name', 'path', 'hostname', 'id')
-class LogServer(object):
+class LogServer:
     @cherrypy.expose
     def index(self, mode, name, path, hostname, id):
+        cherrypy.log(mode)
+        cherrypy.log(name)
+        cherrypy.log(path)
+        cherrypy.log(hostname)
+        cherrypy.log(id)
         addlog.insert_data(id, mode, hostname, name, path)
 
-cherrypy.config.update({'log.screen': False,
-                        'log.access_file': '/var/tmp/module.logs.access',
-                        'log.error_file': '/var/tmp/module.logs.err',})
-
-cherrypy.config.update({'server.socket_host': '0.0.0.0',
-                         'server.socket_port': 8087,})
-
-cherrypy.quickstart(LogServer(), '/logs/')
+conf = os.path.join(os.path.dirname(__file__), 'server.conf')
+cherrypy.quickstart(LogServer(), '/logs/', config=conf)

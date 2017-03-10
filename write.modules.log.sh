@@ -54,12 +54,4 @@ echo "Mode is $mode" 1>&2
 echo "Name is $name" 1>&2
 echo "Path is $path" 1>&2
 
-curl --connect-timeout 1 http://10.126.106.28:8887/logs/$mode/$name/$path/$hostname/$kaust_id/ 2>/dev/null
-
-#ssh -q noor2 "${KAUST_MODULES_ROOT}/common/add.modules.log.py" \
-#    --mode $mode \
-#    --name $name \
-#    --path $path \
-#    --id $kaust_id \
-#    --hostname $hostname \
-#    1>&2 2>/dev/null
+curl --connect-timeout 1 http://myws.kaust.edu.sa/logs?mode=$mode&name=$name&path=$path&hostname=$hostname&id=$kaust_id/ 1>&2 2>/dev/null
