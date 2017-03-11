@@ -2,20 +2,22 @@
 
 from datetime import datetime
 import mysql.connector
-import sys, getopt, os, subprocess
+import sys, getopt, os, subprocess, ldap
 
 def insert_data(kaust_id, mode, hostname, name, path):
     context = mysql.connector.connect(user='rcapps',
                                       password="rcapps",
                                       host='localhost',
-                                      database='module_usage')
+                                      database='env_modules')
     cursor = context.cursor()
     now = datetime.now().date()
+    full_name = get_full_name_from(kaust_id)
     insert = ("INSERT INTO module_usage "
-              "(kaust_id, when, mode, hostname, name, path) "
-              "VALUES (%(kaust_id)s, %(when)s, %(mode)s, %(hostname)s, %(name)s, %(path)s)")
+              "(kaust_id, full_name, when, mode, hostname, name, path) "
+              "VALUES (%(kaust_id)s, %(full_name)s, %(when)s, %(mode)s, %(hostname)s, %(name)s, %(path)s)")
     data = {
         'kaust_id': kaust_id,
+        'full_name': full_name,
         'when': now,
         'mode': mode,
         'hostname': hostname,
@@ -28,6 +30,18 @@ def insert_data(kaust_id, mode, hostname, name, path):
     context.commit()
     cursor.close()
     context.close()
+
+def get_full_name_from(kaust_id):
+    l = ldap.initialize('ldap://wthdc1sr01.kaust.edu.sa')
+    try:
+        l.protocol_version = ldap.VERSION3
+        l.simple_bind_s('arenaam@KAUST.EDU.SA', password)
+        searchFilter = "(uidNumber=%s)" % kaust_id
+        return l.search_ext_s('DC=KAUST,DC=EDU,DC=SA', ldap.SCOPE_SUBTREE, searchFilter, ['displayName'])
+    except Exception, error:
+        print error
+    finally:
+        l.unbind_s()
 
 def main(argv):
     mode = ''
