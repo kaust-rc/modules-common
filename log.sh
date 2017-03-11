@@ -48,10 +48,4 @@ done
 kaust_id=$(id -u)
 hostname=$(hostname -s)
 
-echo "KAUST ID is $kaust_id" 1>&2
-echo "Host is $hostname" 1>&2
-echo "Mode is $mode" 1>&2
-echo "Name is $name" 1>&2
-echo "Path is $path" 1>&2
-
-curl --connect-timeout 1 http://myws.kaust.edu.sa/logs?mode=$mode&name=$name&path=$path&hostname=$hostname&id=$kaust_id/ 1>&2 2>/dev/null
+curl --connect-timeout 1 http://myws.kaust.edu.sa/logs?mode=$mode&name=$name&path=$path&hostname=$hostname&id=$kaust_id 1>&2 2>/dev/null
