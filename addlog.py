@@ -8,28 +8,27 @@ def insert_data(kaust_id, mode, hostname, name, path):
     context = mysql.connector.connect(user='rcapps',
                                       password="rcapps",
                                       host='localhost',
-                                      database='env_modules')
-    cursor = context.cursor()
-    now = datetime.now().date()
-    full_name = get_full_name_from(kaust_id)
-    insert = ("INSERT INTO module_usage "
-              "(kaust_id, full_name, when, mode, hostname, name, path) "
-              "VALUES (%(kaust_id)s, %(full_name)s, %(when)s, %(mode)s, %(hostname)s, %(name)s, %(path)s)")
-    data = {
-        'kaust_id': kaust_id,
-        'full_name': full_name,
-        'when': now,
-        'mode': mode,
-        'hostname': hostname,
-        'name': name,
-        'path': path,
-    }
-    cursor.execute(insert, data)
-
-    # Make sure data is committed to the database
-    context.commit()
-    cursor.close()
-    context.close()
+                                      database='env_modules',
+                                      autocommit=True)
+    try :
+        with connection as cursor:
+            sql = ("INSERT INTO module_usage "
+                   "(kaust_id, full_name, when, mode, hostname, name, path) "
+                   "VALUES (%(kaust_id)s, %(full_name)s, %(when)s, %(mode)s, %(hostname)s, %(name)s, %(path)s)")
+            data = {
+                'kaust_id': kaust_id,
+                'full_name': get_full_name_from(kaust_id),
+                'when': datetime.now().date(),
+                'mode': mode,
+                'hostname': hostname,
+                'name': name,
+                'path': path,
+            }
+            cursor.execute(sql, data)
+            cursor.close()
+    finally:
+        # Close connection to database
+        context.close()
 
 def get_full_name_from(kaust_id):
     l = ldap.initialize('ldap://wthdc1sr01.kaust.edu.sa')
