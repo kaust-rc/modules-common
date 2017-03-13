@@ -7,6 +7,10 @@ set ::module_build [file tail [module-info name]]
 set ::distro el6
 
 
+# Log what's happening
+exec $env(KAUST_MODULES_ROOT)/common/log.sh --mode [module-info mode] --name [module-info name] --path $ModulesCurrentModulefile &
+
+
 proc GetDirName { appsroot appname } {
     set dirlist [glob -nocomplain -directory $appsroot -tails *]
     return [lsearch -inline -nocase [split $dirlist] $appname]
