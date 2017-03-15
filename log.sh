@@ -49,4 +49,4 @@ kaust_id=$(id -u)
 hostname=$(hostname -s)
 
 curl -s --connect-timeout 1 -o /dev/null --stderr /dev/null \
-    http://myws.kaust.edu.sa/logs?mode=$mode'&'name=$name'&'path=$path'&'hostname=$hostname'&'id=$kaust_id
+    http://10.254.144.103/logs?mode=$mode'&'name=$name'&'path=$path'&'hostname=$hostname'&'id=$kaust_id
