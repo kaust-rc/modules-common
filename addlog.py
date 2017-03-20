@@ -20,7 +20,7 @@ def insert_data(kaust_id, mode, hostname, name, path):
                 'full_name': get_full_name_from(kaust_id),
                 'when': datetime.now().date(),
                 'mode': mode,
-                'hostname': hostname,
+                'hostname': hostname.lower(),
                 'name': name,
                 'path': path,
             }
