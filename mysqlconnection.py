@@ -14,7 +14,7 @@ class MySQLConnection:
         return self.cursor
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        if self.commit:
+        if self.autocommit:
             self.connection.commit()
         self.cursor.close()
         self.connection.close()
