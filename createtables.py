@@ -19,7 +19,7 @@ TABLES['module_usage'] = (
     "  path varchar(100) NOT NULL,"
     "  PRIMARY KEY (trans_id),"
     "  KEY kaust_id (kaust_id),"
-    ") ENGINE=InnoDB DEFAULT CHARSET=utf-8)"
+    ") ENGINE=InnoDB DEFAULT CHARSET=utf-8")
 
 with MySQLConnection(user='apps', password='app5ar3thebesT', host='localhost', database='env_modules', autocommit=True) as cursor:
     for name, ddl in TABLES.iteritems():
