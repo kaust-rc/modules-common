@@ -8,17 +8,17 @@ from mysqlconnection import MySQLConnection
 
 TABLES = {}
 TABLES['module_usage'] = (
-    "CREATE TABLE `module_usage` ("
-    "  `trans_id` int(11) NOT NULL AUTO_INCREMENT,"
-    "  `kaust_id` int(6) NOT NULL,"
-    "  `full_name` varchar(50) NOT NULL,"
-    "  `when` date NOT NULL,"
-    "  `mode` varchar(10) NOT NULL,"
-    "  `hostname` varchar(50) NOT NULL,"
-    "  `name` varchar(20) NOT NULL,"
-    "  `path` varchar(100) NOT NULL,"
-    "  PRIMARY KEY (`trans_id`),"
-    "  KEY `kaust_id` (`kaust_id`),"
+    "CREATE TABLE module_usage ("
+    "  trans_id int(11) NOT NULL AUTO_INCREMENT,"
+    "  kaust_id int(6) NOT NULL,"
+    "  full_name varchar(50) NOT NULL,"
+    "  when date NOT NULL,"
+    "  mode varchar(10) NOT NULL,"
+    "  hostname varchar(50) NOT NULL,"
+    "  name varchar(20) NOT NULL,"
+    "  path varchar(100) NOT NULL,"
+    "  PRIMARY KEY (trans_id),"
+    "  KEY kaust_id (kaust_id),"
     ") ENGINE=InnoDB")
 
 with MySQLConnection(user='apps', password='app5ar3thebesT', host='localhost', database='env_modules', autocommit=True) as cursor:
