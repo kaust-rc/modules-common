@@ -1,7 +1,7 @@
 import mysql.connector
 
 class MySQLConnection:
-    def __init__(self, user='apps', password='app5ar3thebesT', host='10.254.144.103', database='env_modules', autocommit=True):
+    def __init__(self, user='apps', password='app5ar3thebesT', host='localhost', database='env_modules', autocommit=True):
         self.user = user
         self.password = password
         self.host = host
