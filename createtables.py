@@ -12,7 +12,7 @@ TABLES['module_usage'] = (
     "  `trans_id` int(11) NOT NULL AUTO_INCREMENT,"
     "  `kaust_id` int(6) NOT NULL,"
     "  `full_name` varchar(50) NOT NULL,"
-    "  `when` date NOT NULL,"
+    "  `when_date` varchar(10) NOT NULL,"
     "  `mode` varchar(10) NOT NULL,"
     "  `hostname` varchar(50) NOT NULL,"
     "  `name` varchar(20) NOT NULL,"
