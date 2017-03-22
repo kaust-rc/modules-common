@@ -9,16 +9,8 @@ def insert_data(kaust_id, mode, hostname, name, path):
     with MySQLConnection() as cursor:
         sql = ("INSERT INTO module_usage "
                "(kaust_id, full_name, when, mode, hostname, name, path) "
-               "VALUES (%(kaust_id)s, %(full_name)s, %(when)s, %(mode)s, %(hostname)s, %(name)s, %(path)s)")
-        data = {
-            'kaust_id': kaust_id,
-            'full_name': get_full_name_from(kaust_id),
-            'when': datetime.now().date(),
-            'mode': mode,
-            'hostname': hostname.lower(),
-            'name': name,
-            'path': path,
-        }
+               "VALUES (%s, %s, %s, %s, %s, %s, %s)")
+        data = (kaust_id, get_full_name_from(kaust_id), datetime.now().date(), mode, hostname.lower(), name, path)
         cursor.execute(sql, data)
 
 def get_full_name_from(kaust_id):
@@ -44,12 +36,12 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv, "hm:n:p:i:o:", ["mode=", "name=", "path=", "id=", "origin="])
     except getopt.GetoptError:
-        print 'write.modules.log.py -m <mode> -n <name> -p <path> -i <id> -o <hostname>'
+        print 'write.modules.log.py -m <mode> -n <name> -p <path> -i <id> -o <origin>'
         sys.exit(2)
 
     for opt, arg in opts:
         if opt == '-h':
-            print 'write.modules.log.py -m <mode> -n <name> -p <path> -i <id> -o <hostname>'
+            print 'write.modules.log.py -m <mode> -n <name> -p <path> -i <id> -o <origin>'
             sys.exit(0)
         elif opt in ("-m", "--mode"):
             mode = arg
