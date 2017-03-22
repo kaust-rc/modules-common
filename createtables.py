@@ -29,7 +29,7 @@ TABLES['module_usage'] = (
     "  KEY `kaust_id` (`kaust_id`),"
     ") ENGINE=InnoDB")
 
-context = mysql.connector.connect(user='rcapps', password='rcapps', host='localhost', autocommit=True)
+context = mysql.connector.connect(user='apps', password='app5ar3thebesT', host='localhost', autocommit=True)
 try:
     with connection as cursor:
         try:
