@@ -3,6 +3,7 @@
 from datetime import datetime
 import mysql.connector
 import sys, getopt, os, subprocess, ldap
+from mysqlconnection import MySQLConnection
 
 def insert_data(kaust_id, mode, hostname, name, path):
     with MySQLConnection() as cursor:
@@ -24,7 +25,7 @@ def get_full_name_from(kaust_id):
     l = ldap.initialize('ldap://wthdc1sr01.kaust.edu.sa')
     try:
         l.protocol_version = ldap.VERSION3
-        l.simple_bind_s('arenaam@KAUST.EDU.SA', password)
+        l.simple_bind_s('arenaam@KAUST.EDU.SA', 'blabla')
         searchFilter = "(uidNumber=%s)" % kaust_id
         return l.search_ext_s('DC=KAUST,DC=EDU,DC=SA', ldap.SCOPE_SUBTREE, searchFilter, ['displayName'])
     except Exception, error:
@@ -41,14 +42,14 @@ def main(argv):
     hostname = ''
 
     try:
-        opts, args = getopt.getopt(argv, "hm:n:p:i:hn:", ["mode=", "name=", "path=", "id=", "hostname="])
+        opts, args = getopt.getopt(argv, "hm:n:p:i:o:", ["mode=", "name=", "path=", "id=", "origin="])
     except getopt.GetoptError:
-        print 'write.modules.log.py -m <mode> -n <name> -p <path> -i <id> -hn <hostname>'
+        print 'write.modules.log.py -m <mode> -n <name> -p <path> -i <id> -o <hostname>'
         sys.exit(2)
 
     for opt, arg in opts:
         if opt == '-h':
-            print 'write.modules.log.py -m <mode> -n <name> -p <path> -i <id> -hn <hostname>'
+            print 'write.modules.log.py -m <mode> -n <name> -p <path> -i <id> -o <hostname>'
             sys.exit(0)
         elif opt in ("-m", "--mode"):
             mode = arg
@@ -58,7 +59,7 @@ def main(argv):
             path = arg
         elif opt in ("-i", "--id"):
             kaust_id = arg
-        elif opt in ("-hn", "--hostname"):
+        elif opt in ("-o", "--origin"):
             hostname = arg
 
     print 'KAUST ID is ', kaust_id
