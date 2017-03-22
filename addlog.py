@@ -7,9 +7,8 @@ from mysqlconnection import MySQLConnection
 
 def insert_data(kaust_id, mode, hostname, name, path):
     with MySQLConnection() as cursor:
-        sql = ("INSERT INTO module_usage "
-               "(kaust_id, full_name, when, mode, hostname, name, path) "
-               "VALUES (%s, %s, %s, %s, %s, %s, %s)")
+        sql = "INSERT INTO module_usage(kaust_id, full_name, when, mode, hostname, name, path) " \
+              "VALUES(%s,%s,%s,%s,%s,%s,%s)"
         data = (kaust_id, get_full_name_from(kaust_id), datetime.now().date(), mode, hostname.lower(), name, path)
         cursor.execute(sql, data)
 
