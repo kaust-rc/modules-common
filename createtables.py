@@ -5,15 +5,6 @@ from __future__ import print_function
 import mysql.connector
 from mysql.connector import errorcode
 
-def create_database(cursor):
-    try:
-        cursor.execute("CREATE DATABASE {} DEFAULT CHARACTER SET 'utf8'".format(DB_NAME))
-    except mysql.connector.Error as err:
-        print("Failed creating database: {}".format(err))
-        exit(1)
-
-DB_NAME = 'env_modules'
-
 TABLES = {}
 TABLES['module_usage'] = (
     "CREATE TABLE `module_usage` ("
@@ -29,30 +20,15 @@ TABLES['module_usage'] = (
     "  KEY `kaust_id` (`kaust_id`),"
     ") ENGINE=InnoDB")
 
-context = mysql.connector.connect(user='apps', password='app5ar3thebesT', host='localhost', autocommit=True)
-try:
-    with connection as cursor:
+with MySQLConnector(user='apps', password='app5ar3thebesT', host='localhost', database='env_modules', autocommit=True) as cursor:
+    for name, ddl in TABLES.iteritems():
         try:
-            context.database = DB_NAME
+            print("Creating table {}: ".format(name), end='')
+            cursor.execute(ddl)
         except mysql.connector.Error as err:
-            if err.errno == errorcode.ER_BAD_DB_ERROR:
-                create_database(cursor)
-                context.database = DB_NAME
+            if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
+                print("already exists")
             else:
-                print(err)
-                exit(1)
-
-        for name, ddl in TABLES.iteritems():
-            try:
-                print("Creating table {}: ".format(name), end='')
-                cursor.execute(ddl)
-                cursor.close()
-            except mysql.connector.Error as err:
-                if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
-                    print("already exists")
-                else:
-                    print(err.msg)
-            else:
-                print("OK")
-finally:
-    context.close()
+                print(err.msg)
+        else:
+            print("OK")
