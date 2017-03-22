@@ -4,6 +4,7 @@ from __future__ import print_function
 
 import mysql.connector
 from mysql.connector import errorcode
+from mysqlconnection import MySQLConnection
 
 TABLES = {}
 TABLES['module_usage'] = (
@@ -20,7 +21,7 @@ TABLES['module_usage'] = (
     "  KEY `kaust_id` (`kaust_id`),"
     ") ENGINE=InnoDB")
 
-with MySQLConnector(user='apps', password='app5ar3thebesT', host='localhost', database='env_modules', autocommit=True) as cursor:
+with MySQLConnection(user='apps', password='app5ar3thebesT', host='localhost', database='env_modules', autocommit=True) as cursor:
     for name, ddl in TABLES.iteritems():
         try:
             print("Creating table {}: ".format(name), end='')

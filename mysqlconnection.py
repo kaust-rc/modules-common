@@ -1,4 +1,4 @@
-class MySQLConnector:
+class MySQLConnection:
     def __init__(self, user='apps', password='app5ar3thebesT', host='localhost', database='env_modules', autocommit=True):
         self.user = user
         self.password = password
