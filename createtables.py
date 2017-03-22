@@ -21,7 +21,7 @@ TABLES['module_usage'] = (
     "  KEY kaust_id (`kaust_id`)"
     ") ENGINE=InnoDB DEFAULT CHARSET=utf8")
 
-with MySQLConnection(user='apps', password='app5ar3thebesT', host='localhost', database='env_modules', autocommit=True) as cursor:
+with MySQLConnection() as cursor:
     for name, ddl in TABLES.iteritems():
         try:
             print("Creating table {}: ".format(name), end='')

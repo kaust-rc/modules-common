@@ -5,30 +5,20 @@ import mysql.connector
 import sys, getopt, os, subprocess, ldap
 
 def insert_data(kaust_id, mode, hostname, name, path):
-    context = mysql.connector.connect(user='apps',
-                                      password="app5ar3thebesT",
-                                      host='localhost',
-                                      database='env_modules',
-                                      autocommit=True)
-    try :
-        with connection as cursor:
-            sql = ("INSERT INTO module_usage "
-                   "(kaust_id, full_name, when, mode, hostname, name, path) "
-                   "VALUES (%(kaust_id)s, %(full_name)s, %(when)s, %(mode)s, %(hostname)s, %(name)s, %(path)s)")
-            data = {
-                'kaust_id': kaust_id,
-                'full_name': get_full_name_from(kaust_id),
-                'when': datetime.now().date(),
-                'mode': mode,
-                'hostname': hostname.lower(),
-                'name': name,
-                'path': path,
-            }
-            cursor.execute(sql, data)
-            cursor.close()
-    finally:
-        # Close connection to database
-        context.close()
+    with MySQLConnection() as cursor:
+        sql = ("INSERT INTO module_usage "
+               "(kaust_id, full_name, when, mode, hostname, name, path) "
+               "VALUES (%(kaust_id)s, %(full_name)s, %(when)s, %(mode)s, %(hostname)s, %(name)s, %(path)s)")
+        data = {
+            'kaust_id': kaust_id,
+            'full_name': get_full_name_from(kaust_id),
+            'when': datetime.now().date(),
+            'mode': mode,
+            'hostname': hostname.lower(),
+            'name': name,
+            'path': path,
+        }
+        cursor.execute(sql, data)
 
 def get_full_name_from(kaust_id):
     l = ldap.initialize('ldap://wthdc1sr01.kaust.edu.sa')
@@ -39,6 +29,7 @@ def get_full_name_from(kaust_id):
         return l.search_ext_s('DC=KAUST,DC=EDU,DC=SA', ldap.SCOPE_SUBTREE, searchFilter, ['displayName'])
     except Exception, error:
         print error
+        return "UNKNOWN"
     finally:
         l.unbind_s()
 
