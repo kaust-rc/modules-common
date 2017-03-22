@@ -6,7 +6,7 @@ import sys, getopt, os, subprocess, ldap
 
 def insert_data(kaust_id, mode, hostname, name, path):
     context = mysql.connector.connect(user='apps',
-                                      password="apps",
+                                      password="app5ar3thebesT",
                                       host='localhost',
                                       database='env_modules',
                                       autocommit=True)
