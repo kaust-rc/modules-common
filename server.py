@@ -4,7 +4,11 @@ import cherrypy, os.path, addlog
 class LogServer:
     @cherrypy.expose
     def index(self, mode, name, path, hostname, id):
-        addlog.insert_data(id, mode, hostname, name, path)
+        try:
+            addlog.insert_data(id, mode, hostname, name, path)
+        except Exception:
+            cherrypy.log("Error inserting data", traceback=True)
+
 
 conf = os.path.join(os.path.dirname(__file__), 'server.conf')
 cherrypy.quickstart(LogServer(), '/logs/', config=conf)
