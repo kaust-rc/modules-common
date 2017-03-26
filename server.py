@@ -52,7 +52,7 @@ LOG_CONF = {
             'propagate': False
         },
         'cherrypy.error': {
-            'handlers': [cherrypy_error'],
+            'handlers': ['cherrypy_error'],
             'level': 'DEBUG',
             'propagate': False
         },
