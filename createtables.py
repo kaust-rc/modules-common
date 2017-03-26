@@ -15,7 +15,7 @@ TABLES['module_usage'] = (
     "  `when_date` varchar(10) NOT NULL,"
     "  `mode` varchar(10) NOT NULL,"
     "  `hostname` varchar(50) NOT NULL,"
-    "  `name` varchar(20) NOT NULL,"
+    "  `name` varchar(50) NOT NULL,"
     "  `path` varchar(100) NOT NULL,"
     "  PRIMARY KEY (`trans_id`),"
     "  KEY kaust_id (`kaust_id`)"
