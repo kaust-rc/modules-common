@@ -13,7 +13,6 @@ class LogServer:
 
 if __name__ == '__main__':
     cherrypy.config.update({'server.socket_host': '0.0.0.0',
-                            'server.socket_port': 80,
                             'server.thread_pool': 10,
                             'log.screen': False,
                             'log.access_file': '/var/tmp/access.log',
