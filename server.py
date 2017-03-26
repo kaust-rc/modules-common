@@ -4,7 +4,7 @@ import addlog
 @cherrypy.popargs('id', 'mode', 'hostname', 'name', 'path')
 class LogServer:
     @cherrypy.expose
-    def index(self, id, mode, hostname, name, path):
+    def logs(self, id, mode, hostname, name, path):
         try:
             cherrypy.log("Inserting: {0}, {1}, {2}, {3}, {4}".format(id, mode, hostname, name, path))
             addlog.insert_data(id, mode, hostname, name, path)
@@ -18,4 +18,4 @@ if __name__ == '__main__':
                             'log.screen': False,
                             'log.access_file': '/var/tmp/access.log',
                             'log.error_file': '/var/tmp/errors.log'})
-    cherrypy.quickstart(LogServer(), 'logs')
+    cherrypy.quickstart(LogServer())
