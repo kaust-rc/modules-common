@@ -32,7 +32,7 @@ LOG_CONF = {
             'encoding': 'utf8'
         },
         'cherrypy_error': {
-            'level':'INFO',
+            'level':'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'void',
             'filename': '/var/tmp/errors.log',
@@ -48,12 +48,10 @@ LOG_CONF = {
         },
         'cherrypy.access': {
             'handlers': ['cherrypy_access'],
-            'level': 'INFO',
             'propagate': False
         },
         'cherrypy.error': {
             'handlers': ['cherrypy_error'],
-            'level': 'DEBUG',
             'propagate': False
         },
     }
@@ -70,8 +68,12 @@ class LogServer:
             cherrypy.log("Error inserting data", traceback=True)
 
 if __name__ == '__main__':
-    conf = os.path.join(os.path.dirname(__file__), 'server.conf')
-    cherrypy.config.update(conf)
+    cherrypy.config.update({'server.socket_host': 0.0.0.0,
+                            'server.socket_port': 80,
+                            'server.thread_pool': 10,
+                            'log.screen': False,
+                            'log.access_file': '',
+                            'log.error_file': ''})
     cherrypy.engine.unsubscribe('graceful', cherrypy.log.reopen_files)
     logging.config.dictConfig(LOG_CONF)
     cherrypy.quickstart(LogServer(), '/logs/')
