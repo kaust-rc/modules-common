@@ -18,4 +18,4 @@ if __name__ == '__main__':
                             'log.screen': False,
                             'log.access_file': '/var/tmp/access.log',
                             'log.error_file': '/var/tmp/errors.log'})
-    cherrypy.quickstart(LogServer())
+    cherrypy.quickstart(LogServer(), 'logs')

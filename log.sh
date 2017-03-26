@@ -50,4 +50,4 @@ hostname=$(hostname -s)
 
 # Connect to ubunut-dev box containing Apache, MySQL, our Python code.
 curl -s --connect-timeout 1 -o /dev/null --stderr /dev/null \
-    http://10.254.144.103/?mode=$mode'&'name=$name'&'path=$path'&'hostname=$hostname'&'id=$kaust_id
+    http://10.254.144.103/logs?mode=$mode'&'name=$name'&'path=$path'&'hostname=$hostname'&'id=$kaust_id
