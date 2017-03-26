@@ -34,7 +34,7 @@ LOG_CONF = {
         'cherrypy_error': {
             'level':'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'formatter': 'void',
+            'formatter': 'standard',
             'filename': '/var/tmp/errors.log',
             'maxBytes': 10485760,
             'backupCount': 20,
