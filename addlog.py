@@ -16,7 +16,7 @@ def get_full_name_from(kaust_id):
     l = ldap.initialize('ldap://wthdc1sr01.kaust.edu.sa')
     try:
         l.protocol_version = ldap.VERSION3
-        l.simple_bind_s('arenaam@KAUST.EDU.SA', 'blabla')
+        l.simple_bind_s('rcappsldap@KAUST.EDU.SA', 'Make it as cr4zy as possibl3')
         searchFilter = "(uidNumber=%s)" % kaust_id
         return l.search_ext_s('DC=KAUST,DC=EDU,DC=SA', ldap.SCOPE_SUBTREE, searchFilter, ['displayName'])
     except Exception, error:
