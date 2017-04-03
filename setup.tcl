@@ -8,8 +8,8 @@ set ::distro el6
 
 
 # Log what's happening
-exec $env(KAUST_MODULES_ROOT)/common/log.sh --mode [module-info mode] \
-     --name [module-info name] --path $ModulesCurrentModulefile &
+blt::bgexec $env(KAUST_MODULES_ROOT)/common/log.sh --mode [module-info mode] \
+     --name [module-info name] --path $ModulesCurrentModulefile
 
 
 proc GetDirName { appsroot appname } {
