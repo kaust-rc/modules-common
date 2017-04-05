@@ -48,6 +48,6 @@ done
 kaust_id=$(id -u)
 hostname=$(hostname -s)
 
-# Connect to ubunut-dev box containing Apache, MySQL, our Python code.
-curl -s --connect-timeout 1 --max-time 5 -o /dev/null --stderr /dev/null \
+# Connect to ELK box containing Apache, MySQL, our Python code and ELK Stack.
+curl -s --connect-timeout 1 --max-time 3 -o /dev/null --stderr /dev/null \
     http://10.254.144.103/logs?mode=$mode'&'name=$name'&'path=$path'&'hostname=$hostname'&'id=$kaust_id
