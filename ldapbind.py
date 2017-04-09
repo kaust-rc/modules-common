@@ -1,11 +1,9 @@
+import subprocess
 import ldap
 import ldap.sasl
-import subprocess
 
-ldap.sasl._trace_level = 0
-ldap.set_option(ldap.OPT_DEBUG_LEVEL, 0)
 
-class LdapBind:
+class LdapBind(object):
     def __init__(self):
         self.sasl_auth = ldap.sasl.sasl('', 'GSSAPI')
         self.ldap_connection = ldap.initialize('ldap://wthdc1sr01.kaust.edu.sa', trace_level=0)
@@ -14,21 +12,23 @@ class LdapBind:
 
     def __enter__(self):
         try:
-            self._kinit()
+            LdapBind.kinit()
             self.ldap_connection.sasl_interactive_bind_s("", self.sasl_auth)
             return self.ldap_connection
-        except ldap.LDAPError, e:
-            print 'Error using SASL mechanism', self.sasl_auth.mech, str(e)
+        except ldap.LDAPError, error:
+            print 'Error using SASL mechanism', self.sasl_auth.mech, str(error)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         try:
             self.ldap_connection.unbind()
             del self.ldap_connection
         finally:
-            self._kdestroy()
+            LdapBind.kdestroy()
 
-    def _kinit(self):
+    @staticmethod
+    def kinit():
         subprocess.check_call(['kinit', '-t', '/etc/krb5.keytab', '-k', 'host/ubunbtu-14.kaust.edu.sa@KAUST.EDU.SA'])
 
-    def _kdestroy(self):
+    @staticmethod
+    def kdestroy():
         subprocess.check_call(['kdestroy'])

@@ -2,7 +2,7 @@ import cherrypy
 import addlog
 
 @cherrypy.popargs('id', 'mode', 'hostname', 'name', 'path')
-class LogServer:
+class LogServer(object):
     @cherrypy.expose
     def logs(self, id, mode, hostname, name, path):
         try:

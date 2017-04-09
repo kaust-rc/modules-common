@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 
-from datetime import datetime
-import sys, getopt, ldap
 from mysqlconnection import MySQLConnection
 from ldapbind import LdapBind
-
+import ldap
 
 def add_names():
     ids = []
@@ -16,20 +14,20 @@ def add_names():
             row = select_cursor.fetchone()
 
     with MySQLConnection() as insert_cursor:
-        for id in ids:
-            id = id[0]
+        for kaust_id in ids:
+            kaust_id = kaust_id[0]
             sql = """ UPDATE module_usage
                       SET full_name = %s
                       WHERE kaust_id = %s"""
-            data = (get_full_name_from(id), id)
+            data = (get_full_name_from(kaust_id), kaust_id)
             print sql, data
             insert_cursor.execute(sql, data)
 
 def get_full_name_from(kaust_id):
-    with LdapBind() as l:
+    with LdapBind() as ldap_bind:
         try:
-            searchFilter = "(uidNumber=%s)" % kaust_id
-            results = l.search_ext_s('DC=KAUST,DC=EDU,DC=SA', ldap.SCOPE_SUBTREE, searchFilter, ['displayName'])
+            search_filter = "(uidNumber=%s)" % kaust_id
+            results = ldap_bind.search_s('DC=KAUST,DC=EDU,DC=SA', ldap.SCOPE_SUBTREE, search_filter, ['displayName'])
             # The results are {DN, ATRR} pairs returned as a list
             # Here's an example of the what's the output:
             # [('CN=arenaam,OU=STAFF,OU=KAUST USERS,DC=KAUST,DC=EDU,DC=SA', {'displayName': ['Antonio M. Arena']}),
@@ -38,9 +36,9 @@ def get_full_name_from(kaust_id):
             #  (None, ['ldap://KAUST.EDU.SA/CN=Configuration,DC=KAUST,DC=EDU,DC=SA'])]
             # That's why we have this masterpiece of code to pull out a user's real name :P
             return results[0][1]['displayName'][0]
-        except Exception, error:
+        except ldap.LDAPError, error:
             print error
             return "UNKNOWN"
 
-if __name__=='__main__':
+if __name__ == '__main__':
     add_names()

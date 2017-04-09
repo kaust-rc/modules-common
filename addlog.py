@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 from datetime import datetime
-import sys, getopt, ldap
+import sys
+import getopt
+import ldap
 from mysqlconnection import MySQLConnection
 from ldapbind import LdapBind
 
@@ -14,10 +16,10 @@ def insert_data(kaust_id, mode, hostname, name, path):
         cursor.execute(sql, data)
 
 def get_full_name_from(kaust_id):
-    with LdapBind() as l:
+    with LdapBind() as ldap_bind:
         try:
-            searchFilter = "(uidNumber=%s)" % kaust_id
-            results = l.search_ext_s('DC=KAUST,DC=EDU,DC=SA', ldap.SCOPE_SUBTREE, searchFilter, ['displayName'])
+            search_filter = "(uidNumber=%s)" % kaust_id
+            results = ldap_bind.search_s('DC=KAUST,DC=EDU,DC=SA', ldap.SCOPE_SUBTREE, search_filter, ['displayName'])
             # The results are {DN, ATRR} pairs returned as a list
             # Here's an example of the what's the output:
             # [('CN=arenaam,OU=STAFF,OU=KAUST USERS,DC=KAUST,DC=EDU,DC=SA', {'displayName': ['Antonio M. Arena']}),
@@ -26,7 +28,7 @@ def get_full_name_from(kaust_id):
             #  (None, ['ldap://KAUST.EDU.SA/CN=Configuration,DC=KAUST,DC=EDU,DC=SA'])]
             # That's why we have this masterpiece of code to pull out a user's real name :P
             return results[0][1]['displayName'][0]
-        except Exception, error:
+        except ldap.LDAPError, error:
             print error
             return "UNKNOWN"
 
@@ -38,7 +40,7 @@ def main(argv):
     hostname = ''
 
     try:
-        opts, args = getopt.getopt(argv, "hm:n:p:i:o:", ["mode=", "name=", "path=", "id=", "origin="])
+        opts = getopt.getopt(argv, "hm:n:p:i:o:", ["mode=", "name=", "path=", "id=", "origin="])
     except getopt.GetoptError:
         print 'write.modules.log.py -m <mode> -n <name> -p <path> -i <id> -o <origin>'
         sys.exit(2)
@@ -65,5 +67,5 @@ def main(argv):
     print 'Path is ', path
     insert_data(kaust_id, mode, hostname, name, path)
 
-if __name__=='__main__':
+if __name__ == '__main__':
     main(sys.argv[1:])
