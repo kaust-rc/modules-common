@@ -1,3 +1,14 @@
-#!/bin/bash
+#!/bin/sh
+# Init script for cherrypy server
+#
+### BEGIN INIT INFO
+# Provides:          server.py
+# Required-Start:    $remote_fs
+# Required-Stop:     $remote_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: 
+# Description:       Module logs
+### END INIT INFO
 
-nohup python server.py > /tmp/cherrypy.out &
+nohup python /opt/modules-common/server.py > /tmp/cherrypy.out &
