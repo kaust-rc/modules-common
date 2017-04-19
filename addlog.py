@@ -18,7 +18,7 @@ def insert_module_usage(kaust_id, mode, hostname, name, path):
         cursor.execute(sql, data)
 
 def insert_hostname_ip(hostname, ip_addr):
-    with MySQLConnection(database='hostname_ip') as cursor:
+    with MySQLConnection() as cursor:
         sql = "INSERT INTO hostname_ip(hostname, ip) VALUES(%s,%s) " \
               "ON DUPLICATE KEY UPDATE ip=%s"
         data = (hostname.lower(), ip_addr, ip_addr)
