@@ -8,20 +8,14 @@ from ldapbind import LdapBind
 
 def insert_data(kaust_id, mode, hostname, name, path, ip_addr):
     insert_module_usage(kaust_id, mode, hostname, name, path)
-    insert_hostname_ip(hostname, ip_addr)
+    if is_loggable(hostname):
+        insert_hostname_ip(hostname, ip_addr)
 
 def insert_module_usage(kaust_id, mode, hostname, name, path):
     with MySQLConnection() as cursor:
         sql = "INSERT INTO module_usage(kaust_id, full_name, when_date, mode, hostname, name, path) " \
               "VALUES(%s,%s,%s,%s,%s,%s,%s)"
         data = (kaust_id, get_full_name_from(kaust_id), datetime.now().date(), mode, hostname.lower(), name, path)
-        cursor.execute(sql, data)
-
-def insert_hostname_ip(hostname, ip_addr):
-    with MySQLConnection() as cursor:
-        sql = "INSERT INTO hostname_ip(hostname, ip) VALUES(%s,%s) " \
-              "ON DUPLICATE KEY UPDATE ip=%s"
-        data = (hostname.lower(), ip_addr, ip_addr)
         cursor.execute(sql, data)
 
 def get_full_name_from(kaust_id):
@@ -40,3 +34,16 @@ def get_full_name_from(kaust_id):
         except ldap.LDAPError, error:
             print error
             return "UNKNOWN"
+
+def is_loggable(hostname):
+    return hostname.startswith('kw') or \
+           hostname.startswith('myws') or \
+           hostname.startswith('rsws') or \
+           hostname.startswith('lth')
+
+def insert_hostname_ip(hostname, ip_addr):
+    with MySQLConnection() as cursor:
+        sql = "INSERT INTO hostname_ip(hostname, ip) VALUES(%s,%s) " \
+              "ON DUPLICATE KEY UPDATE ip=%s"
+        data = (hostname.lower(), ip_addr, ip_addr)
+        cursor.execute(sql, data)
