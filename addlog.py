@@ -36,10 +36,15 @@ def get_full_name_from(kaust_id):
             return "UNKNOWN"
 
 def is_loggable(hostname):
-    return hostname.startswith('kw') or \
-           hostname.startswith('myws') or \
-           hostname.startswith('rsws') or \
-           hostname.startswith('lth')
+    return not hostname.startswith('ca') and \
+           not hostname.startswith('noor2-apps') and \
+           not hostname.startswith('smp') and \
+           not hostname.startswith('gpu') and \
+           not hostname.startswith('rcfen') and \
+           not hostname.startswith('smc-apps') and \
+           not hostname.startswith('ci') and \
+           not hostname.startswith('hkw') and \
+           not hostname.startswith('csb')
 
 def insert_hostname_ip(hostname, ip_addr):
     with MySQLConnection() as cursor:
