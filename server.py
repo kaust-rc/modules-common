@@ -6,8 +6,9 @@ class LogServer(object):
     @cherrypy.expose
     def logs(self, id, mode, hostname, name, path):
         try:
-            cherrypy.log("Inserting: {0}, {1}, {2}, {3}, {4}".format(id, mode, hostname, name, path))
-            addlog.insert_data(id, mode, hostname, name, path)
+            ip_addr = cherrypy.request.headers.get('X-FORWARDED-FOR')
+            cherrypy.log("Inserting: {0}, {1}, {2}, {3}, {4}, {5}".format(id, mode, hostname, ip_addr, name, path))
+            addlog.insert_data(id, mode, hostname, name, path, ip_addr)
         except Exception:
             cherrypy.log("Error inserting data", traceback=True)
 

@@ -20,6 +20,13 @@ TABLES['module_usage'] = (
     "  PRIMARY KEY (`trans_id`),"
     "  KEY kaust_id (`kaust_id`)"
     ") ENGINE=InnoDB DEFAULT CHARSET=utf8")
+TABLES['hostname_ip'] = (
+    "CREATE TABLE IF NOT EXISTS `hostname_ip` ("
+    "  `hostname` varchar(50) NOT NULL,"
+    "  `ip` varchar(15) NOT NULL,"
+    "  PRIMARY KEY (`hostname`),"
+    "  KEY ip (`ip`)"
+    ") ENGINE=InnoDB DEFAULT CHARSET=utf8")
 
 with MySQLConnection() as cursor:
     for name, ddl in TABLES.iteritems():
